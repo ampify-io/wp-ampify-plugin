@@ -1,1 +1,0 @@
-# wp-ampify-plugin
