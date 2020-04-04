@@ -1,5 +1,5 @@
 === Ampify ===
-Contributors: @ampify
+Contributors: ampify
 Tags: AMP, tool, devtool	
 Requires at least: 4.0
 Tested up to: 5.3.2
@@ -11,7 +11,6 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Ampify is a development platform for quick and accurate recreation of any site in AMP.
 
 == Description ==
-
 
 *Identical AMP Made Possible:* Ampify's WP plugin enables the quick integration of your Ampfiy-created AMP site into your WP website. Simply install the plugin, and your AMP site will be deployed and mirror your site, its content changes and new pages. To verify the accuracy of each of your AMP pages, go to your account at https://console.ampify.io/.
 
@@ -39,7 +38,6 @@ Learn more and signup for free @ [ampify.io](https://www.ampify.io/ "Identical A
 2. Install the plugin from WP's plugin store.
 3. Activate the plugin through the 'Plugins' screen in WordPres
 
-
 == Frequently Asked Questions ==
 
 = Is Ampify free to use? =
@@ -55,13 +53,18 @@ Yes - you need to signup @[ampify.io](https://www.ampify.io/ "Identical AMP made
 Some coding is required to work with the Ampify Development Platform. Ampify also offers End-to-End AMP plan, in which Ampify will setup your site. Learn more @[ampify.io](https://www.ampify.io/#plans "Identical AMP made Possible").
 
 == Screenshots ==
-
+1. Identical AMP made Possible
 
 == Changelog ==
-
 = 1.0 =
 * First version.
+
+= 1.0.8 =
+* Added option to include spesific urls to be ampified.
 
 == Upgrade Notice ==
 = 1.0 =
 * First version.
+
+= 1.0.8 =
+* Added option to include spesific urls to be ampified.

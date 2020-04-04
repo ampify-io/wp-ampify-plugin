@@ -3,7 +3,7 @@
  * Plugin Name: Ampify.io AMP
  * Plugin URI: https//ampify.io/plugins/wp
  * Description: Ampify.io AMP
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: Ampify LTD
  * Author URI: https://ampify.io
  */
@@ -16,7 +16,7 @@ class AmpifyPlugin {
     add_action('admin_init', array($this, 'register_settings'));
 
     if (get_option('ampify_is_active') && get_option('ampify_project_id')) {
-      if (!$this->isPageExcluded()) {
+      if ($this->isPageIncluded() && !$this->isPageExcluded()) {
         add_action('wp_head', array($this, 'wp_head_hook'));
       } else {
       }
@@ -36,9 +36,30 @@ class AmpifyPlugin {
       },
       $pattern
     );
-    $rx = '/^' . preg_replace('/\*/', '.*', $rx) .'$/';
-  
+    $rx = '/' . preg_replace('/\*/', '.*', $rx) .'$/';
+
     return preg_match($rx, $input);
+  }
+
+  public function isPageIncluded() {
+    $included = trim(get_option('ampify_include_urls'));
+    $request_uri = $_SERVER['REQUEST_URI'];
+    
+    if ($included) {
+      $included = explode("\n", $included);
+
+      foreach ($included as $include) {
+        $include = trim($include);
+
+        if ($this->isGlobMatch($include, $request_uri)) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    return true;
   }
 
   public function isPageExcluded() {
@@ -50,7 +71,7 @@ class AmpifyPlugin {
 
       foreach ($excluded as $exclude) {
         $exclude = trim($exclude);
-        
+ 
         if ($this->isGlobMatch($exclude, $request_uri)) {
           return true;
         }
@@ -121,6 +142,7 @@ class AmpifyPlugin {
     register_setting( 'ampify_settings', 'ampify_is_active' );
     register_setting( 'ampify_settings', 'ampify_project_id' );
     register_setting( 'ampify_settings', 'ampify_exclude_urls' );
+    register_setting( 'ampify_settings', 'ampify_include_urls' );
   }
 
   
@@ -136,9 +158,9 @@ class AmpifyPlugin {
       text-align: left;
     }
 
-    .ampify_exclude_urls {
+    .ampify_include_urls, .ampify_exclude_urls {
       width: 400px;
-      height: 150px;
+      height: 120px;
     }
 
     .explain {
@@ -175,13 +197,26 @@ class AmpifyPlugin {
           </tr>
 
           <tr valign="top">
+            <th scope="row"><label for="ampify_include_urls">Include urls: </label></th>
+            <td>
+              <div class="explain">
+                Include pages in AMP<br />
+                /my-article/ -  exclude a specific url <strong class="note">*url must end with /</strong><br />
+                /blog/* - exclude all urls under /blog/<br />
+                Add multiple exclusions with new line<br />
+                Leave this field empty to apply AMP on all pages.
+              </div>
+              <textarea id="ampify_include_urls" name="ampify_include_urls" class="ampify_include_urls"><?php echo get_option('ampify_include_urls')?></textarea>
+            </td>
+          </tr>
+
+          <tr valign="top">
             <th scope="row"><label for="ampify_exclude_urls">Exclude urls: </label></th>
             <td>
               <div class="explain">
-                Excludes pages from AMP<br />
-                /my-article/ -  exclude a spesific url <strong class="note">*url must end with /</strong><br />
-                /blog/* - exclude all urls under /blog/<br />
-                add multiple exclusions with new line
+                Excluded URLs will be excluded even if defined as Included. <br />
+                For example: When /blog/* is added to include and /blog/single-article/ is added as exclude, <br />
+                all /blog/* pages will be Ampfied, excluding /blog/single-article/
               </div>
               <textarea id="ampify_exclude_urls" name="ampify_exclude_urls" class="ampify_exclude_urls"><?php echo get_option('ampify_exclude_urls')?></textarea>
             </td>
