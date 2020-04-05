@@ -3,7 +3,7 @@
  * Plugin Name: Ampify.io AMP
  * Plugin URI: https//ampify.io/plugins/wp
  * Description: Ampify.io AMP
- * Version: 1.0.8
+ * Version: 1.0.9
  * Author: Ampify LTD
  * Author URI: https://ampify.io
  */
@@ -199,26 +199,27 @@ class AmpifyPlugin {
           <tr valign="top">
             <th scope="row"><label for="ampify_include_urls">Include urls: </label></th>
             <td>
+              <div class="explain">Include pages in AMP</div>
+              <textarea id="ampify_include_urls" name="ampify_include_urls" class="ampify_include_urls"><?php echo get_option('ampify_include_urls')?></textarea>
               <div class="explain">
-                Include pages in AMP<br />
-                /my-article/ -  exclude a specific url <strong class="note">*url must end with /</strong><br />
-                /blog/* - exclude all urls under /blog/<br />
-                Add multiple exclusions with new line<br />
+                /my-article/ -  include a specific url <strong class="note">*url must end with /</strong><br />
+                /blog/* - include all urls under /blog/<br />
+                Add multiple inclusions with new line<br />
                 Leave this field empty to apply AMP on all pages.
               </div>
-              <textarea id="ampify_include_urls" name="ampify_include_urls" class="ampify_include_urls"><?php echo get_option('ampify_include_urls')?></textarea>
             </td>
           </tr>
 
           <tr valign="top">
             <th scope="row"><label for="ampify_exclude_urls">Exclude urls: </label></th>
             <td>
+              <div class="explain">Exclude pages from AMP</div>
+              <textarea id="ampify_exclude_urls" name="ampify_exclude_urls" class="ampify_exclude_urls"><?php echo get_option('ampify_exclude_urls')?></textarea>
               <div class="explain">
                 Excluded URLs will be excluded even if defined as Included. <br />
                 For example: When /blog/* is added to include and /blog/single-article/ is added as exclude, <br />
                 all /blog/* pages will be Ampfied, excluding /blog/single-article/
               </div>
-              <textarea id="ampify_exclude_urls" name="ampify_exclude_urls" class="ampify_exclude_urls"><?php echo get_option('ampify_exclude_urls')?></textarea>
             </td>
           </tr>
         </table>
