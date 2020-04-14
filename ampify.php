@@ -3,7 +3,7 @@
  * Plugin Name: Ampify.io AMP
  * Plugin URI: https//ampify.io/plugins/wp
  * Description: Ampify.io AMP
- * Version: 1.0.9
+ * Version: 1.1.0
  * Author: Ampify LTD
  * Author URI: https://ampify.io
  */
@@ -15,11 +15,15 @@ class AmpifyPlugin {
     add_action('admin_menu', array($this, 'add_admin_menu'));
     add_action('admin_init', array($this, 'register_settings'));
 
-    if (get_option('ampify_is_active') && get_option('ampify_project_id')) {
-      if ($this->isPageIncluded() && !$this->isPageExcluded()) {
-        add_action('wp_head', array($this, 'wp_head_hook'));
-      } else {
+    if (get_option('ampify_is_active')) {
+
+      if (get_option('ampify_project_id')) {
+        if ($this->isPageIncluded() && !$this->isPageExcluded()) {
+          add_action('wp_head', array($this, 'wp_head_hook'));
+        }
       }
+
+      $this->add_cors_headers();
     }
 
     if ($this->is_amp()) {
@@ -145,7 +149,32 @@ class AmpifyPlugin {
     register_setting( 'ampify_settings', 'ampify_include_urls' );
   }
 
-  
+  public function add_cors_headers() {
+    $origin        = null;
+    $source_origin = null;
+
+    if ( isset( $_SERVER['HTTP_ORIGIN'] ) ) {
+      $origin = $_SERVER['HTTP_ORIGIN'];
+    }
+
+    if ( isset( $_GET['__amp_source_origin'] ) ) {
+      $source_origin = $_GET['__amp_source_origin'];
+    }
+    
+    if ( ! $origin ) {
+      $origin = $source_origin;
+    }
+
+    if ( $origin ) {
+      header('Access-Control-Allow-Origin: ' . $origin);
+      header('Access-Control-Allow-Credentials: true');
+    }
+
+    if ( $source_origin ) {
+      header('AMP-Access-Control-Allow-Source-Origin: ' . $source_origin);
+      header('Access-Control-Expose-Headers: AMP-Access-Control-Allow-Source-Origin');
+    }
+  }
 
   public function ampify_settings() {
     ?>
